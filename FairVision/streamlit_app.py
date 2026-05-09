@@ -16,7 +16,7 @@ st.set_page_config(
 )
 
 # =========================
-# STYLING (COLORS)
+# STYLING
 # =========================
 st.markdown("""
 <style>
@@ -28,9 +28,10 @@ st.markdown("""
     }
     .card {
         background-color:#111827;
-        padding:10px;
+        padding:12px;
         border-radius:12px;
         text-align:center;
+        margin-top:8px;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -65,16 +66,16 @@ uploaded_files = st.file_uploader(
 )
 
 # =========================
-# STORAGE FOR CHART
+# STORAGE
 # =========================
 predictions = []
 
 # =========================
-# GRID DISPLAY
+# GRID DISPLAY (9 per row fix)
 # =========================
 if uploaded_files:
 
-    cols = st.columns(3)
+    cols = st.columns(9)   # ⭐ 5 images per row
 
     for idx, file in enumerate(uploaded_files):
 
@@ -85,41 +86,73 @@ if uploaded_files:
             outputs = model(x)
             probs = torch.softmax(outputs, dim=1)
 
-            pred_class = torch.argmax(probs, dim=1).item()
-            confidence = probs[0][pred_class].item()
+            pred_class = int(torch.argmax(probs, dim=1))
+            confidence = float(probs[0][pred_class])
+
             predicted_age = ages[pred_class]
 
         predictions.append(predicted_age)
 
-        col = cols[idx % 3]
-
-        with col:
+        with cols[idx % 9]:
             st.image(img, use_container_width=True)
+
             st.markdown(
-                f"<div class='card'>"
-                f"<h3 style='color:#00C853;'>🎯 {predicted_age}</h3>"
-                f"<p style='color:#90CAF9;'>Confidence: {confidence:.2f}</p>"
-                f"</div>",
+                f"""
+                <div class="card">
+                    <h3 style="color:#00C853;">🎯 {predicted_age}</h3>
+                    <p style="color:#90CAF9;">Confidence: {confidence:.2f}</p>
+                </div>
+                """,
                 unsafe_allow_html=True
             )
 
 # =========================
-# 📊 LINE CHART (ONLY IF MULTIPLE IMAGES)
+# TAB VIEW
 # =========================
-if uploaded_files and len(uploaded_files) > 1:
+if uploaded_files and len(uploaded_files) > 0:
 
-    st.markdown("## 📊 Age Distribution Analysis")
+    tab1, tab2, tab3 = st.tabs([
+        "📊 Age Analysis",
+        "🌍 Map View",
+        "🚻 Gender Analysis"
+    ])
 
-    count = Counter(predictions)
+    # =========================
+    # 📊 AGE TAB (FIXED)
+    # =========================
+    with tab1:
 
-    df = pd.DataFrame({
-        "Age Group": list(count.keys()),
-        "Count": list(count.values())
-    })
+        st.markdown("### 📊 Age Distribution")
 
-    chart = alt.Chart(df).mark_line(point=True).encode(
-        x="Age Group",
-        y="Count"
-    ).properties(width=700)
+        if len(predictions) == 0:
+            st.info("No predictions yet")
+        else:
+            count = Counter(predictions)
 
-    st.altair_chart(chart, use_container_width=True)
+            # keep fixed order (IMPORTANT FIX)
+            df = pd.DataFrame({
+                "Age Group": ages,
+                "Count": [count.get(a, 0) for a in ages]
+            })
+
+            chart = alt.Chart(df).mark_line(point=True).encode(
+                x="Age Group",
+                y="Count"
+            ).properties(width=700)
+
+            st.altair_chart(chart, use_container_width=True)
+
+    # =========================
+    # 🌍 MAP TAB (placeholder safe)
+    # =========================
+    with tab2:
+        st.markdown("### 🌍 Map View")
+        st.info("Add map_data here (not included in your snippet)")
+
+    # =========================
+    # 🚻 GENDER TAB (ICON COLOR STYLE)
+    # =========================
+    with tab3:
+
+        st.markdown("### 🌍 Map View")
+        st.info("Add gender_data here (not included in your snippet)")
