@@ -43,6 +43,42 @@ ages = [
     "0-2","3-9","10-19","20-29","30-39",
     "40-49","50-59","60-69","70+"
 ]
+race_coordinates = {
+    "East Asian": {
+        "latitude": 35.8617,
+        "longitude": 104.1954   # Approx. center of East Asia / China region
+    },
+
+    "Indian": {
+        "latitude": 20.5937,
+        "longitude": 78.9629    # India
+    },
+
+    "Black": {
+        "latitude": 1.6508,
+        "longitude": 17.6791    # Central Africa
+    },
+
+    "White": {
+        "latitude": 54.5260,
+        "longitude": 15.2551    # Europe
+    },
+
+    "Middle Eastern": {
+        "latitude": 29.2985,
+        "longitude": 42.5510    # Arabian Peninsula / Middle East
+    },
+
+    "Latino_Hispanic": {
+        "latitude": -8.7832,
+        "longitude": -55.4915   # Latin America / South America region
+    },
+
+    "Southeast Asian": {
+        "latitude": 13.7563,
+        "longitude": 100.5018   # Southeast Asia (Bangkok-centered)
+    }
+}
 
 # =========================
 # MODEL
@@ -75,7 +111,7 @@ predictions = []
 # =========================
 if uploaded_files:
 
-    cols = st.columns(9)   # ⭐ 5 images per row
+    cols = st.columns(9)   # 9 images per row
 
     for idx, file in enumerate(uploaded_files):
 
@@ -154,5 +190,5 @@ if uploaded_files and len(uploaded_files) > 0:
     # =========================
     with tab3:
 
-        st.markdown("### 🌍 Map View")
+        st.markdown("### 🚻 Gender Analysis")
         st.info("Add gender_data here (not included in your snippet)")
