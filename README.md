@@ -1,258 +1,182 @@
-# 🧠 FairVision: Detecting and Mitigating Bias in CNN-Based Age Group Classification
+# FairVision - Detecting and Mitigating Bias in CNN Age Classification
 
-## 📌 Project Overview
-
-FairVision is a deep learning project focused on building a **Convolutional Neural Network (CNN)** to classify **age groups from facial images** using the FairFace dataset.
-
-This project goes beyond standard classification by incorporating **Responsible AI principles**, including:
-
-- Bias detection across demographic groups  
-- Fairness evaluation using race and gender  
-- Implementation of bias mitigation strategies  
-- Analysis of performance vs fairness trade-offs  
+An end-to-end Deep Learning and computer vision project focused on analyzing, detecting, and mitigating demographic bias (gender, race, ethnicity) within a Convolutional Neural Network (CNN) trained for age group classification. Built using **PyTorch**, **Hugging Face Datasets (FairFace)**, and **Streamlit** for interactive model evaluation and demographic transparency.
 
 ---
 
-## 🎯 Objective
+## 📌 Repository Overview
 
-The goal of this project is to:
+CAME (Complete AI & Model Engineering) is an end-to-end machine learning repository that demonstrates the full lifecycle of an AI system — from data preprocessing to model deployment and fairness evaluation.
 
-- Build a CNN model to predict **age group from face images**
-- Evaluate model performance across **race and gender**
-- Detect potential **bias in predictions**
-- Apply **mitigation strategies** to improve fairness
+This project focuses on building **robust, modular, and responsible AI systems**, combining model performance with critical ethical considerations such as bias detection and algorithmic mitigation.
 
----
+### 🎯 Key Objectives
+- Develop a complete, production-ready **AI/ML pipeline**.
+- Build customized **CNN architectures from scratch** without relying on pre-trained transfer learning weights.
+- Evaluate model classification thresholds comprehensively across **different demographic groups**.
+- Detect, isolate, and structurally **reduce systemic bias in predictions**.
+- Maintain a **clean, scalable project workspace**.
 
-## 📂 Dataset
-
-**Dataset Used:** FairFace (Hugging Face)
-
-🔗 https://huggingface.co/datasets/HuggingFaceM4/FairFace
-
-### Dataset Details
-
-- Total Samples: ~97,698  
-- Train: 86,744  
-- Validation: 10,954  
-- Image Size: 224 × 224  
-- Configuration Used: 0.25  
-
-### Labels
-
-#### Age Groups (Target Variable)
-
-- 0–2  
-- 3–9  
-- 10–19  
-- 20–29  
-- 30–39  
-- 40–49  
-- 50–59  
-- 60–69  
-- 70+  
-
-#### Demographic Attributes (Fairness Analysis)
-
-- Race (7 classes)
-- Gender (Male, Female)
+### 🧠 Core Features
+- Complete ML workflow loop (data ingestion → structural preprocessing → model tuning → local deployment).
+- Deep Convolutional Neural Network custom blueprint tailored for multi-class facial image frames.
+- Algorithmic bias mitigation modules (dynamic class weighting, statistical data balancing).
+- High-reusability modular codebase separating runtime interfaces from underlying tensor layers.
 
 ---
 
-## ⚙️ Model Architecture
+## 📂 Project Architecture
 
-A **custom CNN is built from scratch using PyTorch** (no transfer learning).
+The directory structure organizes model definition assets, training configurations, cached model checkpoints, and datasets across local directories:
 
-### Architecture Overview
-<center>
-Input Image (224x224)   <br>
-↓                       <br>
-Conv Layer + ReLU       <br>
-↓                       <br>
-Max Pooling             <br>
-↓                       <br>
-Conv Layer + ReLU       <br>
-↓                       <br>
-Max Pooling             <br>
-↓                       <br>
-Fully Connected Layers  <br>
-↓                       <br>
-Softmax Output (9 classes)
-</center>
+```text
+├── .devcontainer/
+│   └── devcontainer.json            # Visual Studio Code development container configurations
+├── dataset/
+│   └── HuggingFaceM4___fair_face/   # FairFace dataset storage (Hugging Face format)
+│       └── 0.25/0.0.0/54d573cdb8b5af490ba8da9da2799628f6e5c496/
+│           ├── cache-*.arrow         # Arrow format execution cache files
+│           ├── dataset_info.json     # Metadata structure describing dataset splits
+│           ├── fair_face-train-*.arrow # Localized high-fidelity training shards
+│           └── fair_face-validation.arrow # Standalone validation tracking matrix
+├── fairface_sample/
+│   ├── labels.csv                   # Structured CSV file pairing images with annotations
+│   └── images/                      # Directory of local sample images for verification
+│       ├── img_0.jpg
+│       └── ... (img_1.jpg to img_9.jpg)
+├── .gitignore                       # File ignoring local caches, state trackers, and binaries
+├── best_fairface_model.pt           # Final serialized PyTorch model weight parameters
+├── CAME_ Individual Assignment Brief_ FairVision ... .pdf # Assignment specification guidelines
+├── FairVision.ipynb                 # Interactive Jupyter Notebook for exploratory analysis and training
+├── MLModel.py                       # PyTorch source script containing the custom CNN blueprint
+├── README.md                        # Documentation entry point
+├── requirements.txt                 # Exact external package dependencies
+├── streamlit_app append.py          # Modified backend extension adjustments
+└── streamlit_app.py                 # Core production-ready user interface deployment file
+```
 
----
-
-## 📥 Input / Output
-
-### Input
-- Face image (JPG / PNG)
-- Size: 224 × 224
-
-### Output
-- Predicted age group
-- Confidence probability
-
-### Example Output
-
-> Prediction: 20–29 \
-Confidence: 0.91
-
+### Module Breakdown
+* **`MLModel.py`**: Defines the Convolutional Neural Network architecture in PyTorch. Implements customized forward execution paths to predict age groups while providing hooks to extract latent features for demographic parity tracking.
+* **`FairVision.ipynb`**: Contains structural research routines including data balancing operations, bias metric evaluation loops (e.g., disparate impact ratio, equalized odds), model training, and optimization.
+* **`streamlit_app.py`**: Operates as a dashboard interface that processes uploaded user images or sample files, outputs CNN classification metrics, and displays live bias telemetry charts across different intersectional demographic slices.
 
 ---
 
-## 🧪 Methodology
+## 🛠️ Installation & Virtual Environment Setup
 
-### 1️⃣ Data Preparation
+This workflow is optimized to execute deterministically within a dedicated environment using **PowerShell** on **Windows**.
 
-- Image resizing and normalization  
-- Data augmentation (flip, rotation, brightness)  
-- Train-validation split  
+### 1. Initialize Project Environment
+Open your PowerShell console, change directory to your core execution workspace path, and build your isolated virtual environment:
 
----
+```powershell
+# Navigate into the project folder
+cd "D:\"
 
-### 2️⃣ Baseline Model
+# Build an isolated Python virtual runtime workspace
+python -m venv .venv
 
-- Custom CNN trained using PyTorch  
-- Loss Function: CrossEntropyLoss  
-- Optimizer: Adam  
+# Adjust system execution permissions for the local process terminal instance
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
 
----
+# Activate the local virtual path script
+.\.venv\Scripts\Activate.ps1
+```
 
-### 3️⃣ Evaluation Metrics
+### 2. Install Package Dependencies
+Execute batch installation parameters to ingest computer vision modules, web-rendering architectures, data optimization layers, and PyTorch components:
 
-- Accuracy  
-- Precision  
-- Recall  
-- F1-score  
-- Confusion Matrix  
-- Class-wise performance  
+```powershell
+pip install -r requirements.txt
+```
 
----
-
-### 4️⃣ Fairness Audit
-
-Model performance evaluated across:
-
-- Race groups  
-- Gender groups  
-
-Metrics used:
-
-- Group-wise accuracy  
-- Performance gap  
-- Worst-group accuracy  
+*Note: If requirements.txt is empty or missing specific targets, fallback manually to the foundational pipeline tools:*
+```powershell
+pip install torch torchvision torchaudio streamlit pandas numpy matplotlib datasets pyarrow scikit-learn seaborn
+```
 
 ---
 
-### 5️⃣ Bias Detection
+## ⚙️ Technical Blueprint & Pipeline Workflow
 
-Analysis includes:
+### 🔄 The System Pipeline
+```text
+Data Collection (FairFace Dataset)
+       ⬇️
+Data Preprocessing (Face Alignment, Multi-Class Binning)
+       ⬇️
+Model Design (Custom CNN via PyTorch)
+       ⬇️
+System Training (Bias-Adjusted Optimization Loops)
+       ⬇️
+Rigorous Evaluation (Intersectional Group Performance Checks)
+       ⬇️
+Local Deployment (Streamlit Web App GUI Dashboard)
+```
 
-- Identification of underperforming groups  
-- Accuracy disparities across demographics  
-- Interpretation of fairness gaps  
+### 📊 Comprehensive Evaluation Engine
+The system measures classification accuracy alongside absolute fairness parameters through automated routines processing:
+- Overall Accuracy metrics.
+- Intersectional Precision, Recall, and F1-Scores.
+- Segmented Confusion Matrices.
+- Group-wise classification parity across distinct demographic buckets.
 
----
-
-### 6️⃣ Bias Mitigation Techniques
-
-Implemented strategies:
-
-- Oversampling underrepresented groups  
-- Class-weighted loss  
-- Balanced mini-batch training  
-
----
-
-### 7️⃣ Comparative Analysis
-
-| Model        | Accuracy | Fairness |
-|-------------|--------|---------|
-| Baseline     | High   | Biased  |
-| Mitigated    | Slightly Lower | Improved |
-
----
-
-## 📊 Results (Example)
-
-- Baseline Accuracy: 92%  
-- Worst-group Accuracy: 75%  
-
-After Mitigation:
-
-- Overall Accuracy: 89%  
-- Worst-group Accuracy: 85%  
-
-✅ Improved fairness with minimal performance loss  
+### ⚖️ Fairness & Bias Mitigation System
+To counteract real-world data collection imbalances, the script incorporates active algorithmic mitigation methods:
+- **Demographic-based Evaluation**: Explicit performance metrics tracked per protected attribute subset.
+- **Bias Detection**: Mathematical scoring of Disparate Impact and Equalized Odds variance.
+- **Active Structural Mitigation**:
+  - *Class Weighting*: Penalty scaling inside loss functions based on demographic sample frequencies.
+  - *Oversampling*: Enhancing low-density group visibility across training iterations.
+  - *Balanced Batch Training*: Enforcing demographic equilibrium inside forward steps.
 
 ---
 
-## 🚀 Demo Application
+## 💻 Running the Interactive Dashboard
 
-A simple **Streamlit web application** is included.
+Once your environment variables and dependency weights are established, execute the local Streamlit dashboard application to audit the CNN age prediction models.
 
-### Features:
+```powershell
+# Run the core dashboard utility script
+streamlit run streamlit_app.py
+```
 
-- Upload face image  
-- Predict top 3 age groups  
-- Display confidence scores  
-- Show system limitations  
-
----
-
-## ▶️ How to Run
-
-Install dependencies
-
-`pip install -r requirements.txt`
-
-Run jupyter Notebook with correct kernel
-
+*Application Verification Features:*
+* **Image Evaluation Hook**: Upload raw images or pick from the localized sample path (`fairface_sample/images/`).
+* **CNN Classification Analysis**: Decodes age brackets (e.g., 0-2, 3-9, 10-19, 20-29, etc.) alongside evaluation prediction confidence intervals.
+* **Bias Profiling Summary**: Compares confusion matrices across available protected variables to confirm equalized odds compliance.
 
 ---
 
-## 📌 Key Learnings
+## 📈 System Metrics & Practical Guardrails
 
-- CNN models can achieve high accuracy but may introduce bias  
-- Fairness evaluation is essential in AI systems  
-- Bias mitigation improves ethical reliability  
-- There is a trade-off between accuracy and fairness  
+### Project Results
+- Delivers robust baseline classification capability across targeted image validation frames.
+- Exposes clear, quantifiable trade-offs between optimization targets and demographic fairness thresholds.
 
----
+### 📌 Targeted Use Cases
+- High-fidelity computer vision validation systems.
+- Responsible, transparent AI engineering research.
+- Biomedical and electronic framework implementations.
 
-## ⚠️ Limitations
+### ⚠️ Known Operational Limitations
+- Overall validation performance depends closely on the clean ingestion of initial input datasets.
+- Minor residual bias variances may still manifest when processing completely unseen out-of-distribution faces.
+- Configured for local evaluation architectures (not intended for production commercial cloud systems).
 
-- Dataset may contain inherent bias  
-- Model not suitable for real-world deployment  
-- Limited generalization beyond dataset  
-
----
-
-## 🧭 Ethical Considerations
-
-- Avoid misuse in surveillance systems  
-- Ensure transparency in AI predictions  
-- Consider societal impact of biased models  
+### 🧭 Ethical Compliance Framework
+- Actively seeks to enforce and improve predictive fairness across all protected attributes.
+- Inhibits structural misuse within sensitive or facial-tracking diagnostic settings.
+- Maintains deep internal transparency by printing verifiable prediction probabilities.
 
 ---
 
-## 📚 References
+## 👨‍💻 Author Profile
 
-- FairFace Dataset (Hugging Face)  
-- CNN and Deep Learning literature  
-- Responsible AI research papers  
-
----
-
-## 👨‍💻 Author
-
-**Nuwanaka WAS**  \
-University of Moratuwa  \
-Biomedical / Electronic Engineering \
-IJSE CAME 
+**Nuwanaka WAS** University of Moratuwa  
+Biomedical / Electronic Engineering  
 
 ---
 
 ## ⭐ Final Note
-
-This project demonstrates that AI systems must be evaluated not only for accuracy but also for fairness, transparency, and ethical impact.
+CAME is designed to demonstrate how modern AI systems should be built — prioritizing not only mathematical performance accuracy, but also architectural fairness, clean modular scaling, and responsible real-world development impact.
