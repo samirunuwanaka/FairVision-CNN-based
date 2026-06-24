@@ -1,5 +1,7 @@
 # FairVision - Detecting and Mitigating Bias in CNN Age Classification
 
+![Streamlit Application Dashboard Dynamic Preview](streamlit%20app.png)
+
 An end-to-end Deep Learning and computer vision project focused on analyzing, detecting, and mitigating demographic bias (gender, race, ethnicity) within a Convolutional Neural Network (CNN) trained for age group classification. Built using **PyTorch**, **Hugging Face Datasets (FairFace)**, and **Streamlit** for interactive model evaluation and demographic transparency.
 
 ---
@@ -61,6 +63,24 @@ The directory structure organizes model definition assets, training configuratio
 * **`streamlit_app.py`**: Operates as a dashboard interface that processes uploaded user images or sample files, outputs CNN classification metrics, and displays live bias telemetry charts across different intersectional demographic slices.
 
 ---
+## 📊 Dataset Specifications
+
+**Dataset Used:** FairFace (Hugging Face Configuration: 0.25)
+🔗 https://huggingface.co/datasets/HuggingFaceM4/FairFace
+
+### Data Breakdown & Splits
+- **Total Ingested Samples:** ~97,698 images
+- **Training Set Split:** 86,744 images
+- **Validation Set Split:** 10,954 images
+- **Physical Shape:** 224 × 224 pixels (RGB color space)
+
+### Labels & Target Variables
+* **Age Groups (9 Target Classes):** `0–2`, `3–9`, `10–19`, `20–29`, `30–39`, `40–49`, `50–59`, `60–69`, `70+`
+* **Demographic Attributes (Fairness Analysis):**
+  - **Race:** 7 categorized groups (White, Black, Latino, East Asian, Southeast Asian, Indian, Middle Eastern)
+  - **Gender:** Binary tracking vectors (`Male`, `Female`)
+
+---
 
 ## 🛠️ Installation & Virtual Environment Setup
 
@@ -99,20 +119,41 @@ pip install torch torchvision torchaudio streamlit pandas numpy matplotlib datas
 
 ## ⚙️ Technical Blueprint & Pipeline Workflow
 
-### 🔄 The System Pipeline
-```text
+### 🔄 The System Pipeline Flow
+``text
 Data Collection (FairFace Dataset)
        ⬇️
-Data Preprocessing (Face Alignment, Multi-Class Binning)
+Data Preprocessing (Face Alignment, Multi-Class Binning, Augmentations)
        ⬇️
-Model Design (Custom CNN via PyTorch)
+Model Design (Custom CNN Architecture via PyTorch from Scratch)
        ⬇️
-System Training (Bias-Adjusted Optimization Loops)
+System Training (Adam Optimizer, CrossEntropyLoss, Bias-Adjusted Loops)
        ⬇️
-Rigorous Evaluation (Intersectional Group Performance Checks)
+Rigorous Evaluation (Intersectional Group Performance Checks & Auditing)
        ⬇️
-Local Deployment (Streamlit Web App GUI Dashboard)
+Local Deployment (Interactive Streamlit Web App Interface)
 ```
+
+### 🧠 Model Architecture Blueprint
+A custom deep convolutional neural network built natively from scratch in PyTorch without pre-trained model transfer-learning dependencies:
+
+```text
+Input Image (224x224x3 Matrix)
+       ⬇️
+Convolutional Layer (Feature Mapping) + ReLU Activation
+       ⬇️
+Max Pooling Layer (Spatial Downsampling)
+       ⬇️
+Convolutional Layer (Deep Feature Abstraction) + ReLU Activation
+       ⬇️
+Max Pooling Layer (Spatial Downsampling)
+       ⬇️
+Fully Connected Dense Layers (Classification Flattening Layer)
+       ⬇️
+Softmax Activation Layer Output (Produces Probabilities across 9 Age Classes)
+```
+
+---
 
 ### 📊 Comprehensive Evaluation Engine
 The system measures classification accuracy alongside absolute fairness parameters through automated routines processing:
